@@ -24,7 +24,7 @@ def main():
         energy_data = generate_data(sensor_id)
         producer.send('energy_consumption_topic', json.dumps(energy_data).encode('utf-8'))
         print(f"sent data: {energy_data}")
-        time.sleep(5)
+        time.sleep(10)
 
 if __name__ == "__main__":
     main()
