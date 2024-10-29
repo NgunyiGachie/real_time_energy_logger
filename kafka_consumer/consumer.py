@@ -1,5 +1,5 @@
 """
-Kafka consumer for reading and processing events
+Kafka consumer for reading and processing messages from kafka topic
 """
 from Kafka import KafkaConsumer
 
@@ -8,7 +8,7 @@ consumer = KafkaConsumer('energy-report',
                         group_id = 'my-group',
                         bootstrap_servers=['localhost:9092'])
 for message in consumer:
-    print("%s:%d: key=%s value=%s" %(message.topic,
+    print("%s:%d: key=%s value=%s" %(message.topic, 
                                     message.partition,
                                     message.offset, message.key,
                                     message.value))

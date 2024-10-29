@@ -1,5 +1,5 @@
 """
-Kafka producer for writing events to Kafka cluster
+Kafka producer for sending messages to kafka topic
 """
 
 from kafka import KafkaProducer
