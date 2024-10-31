@@ -19,13 +19,14 @@ class ProducerClass:
 if __name__ == '__main__':
     bootstrap_server = 'localhost:9092'
     topic = 'test-topic'
-    a = Admin()
-    p = ProducerClass()
+    a = Admin(bootstrap_server)
+    a.create_topic(topic)
+    p = ProducerClass(bootstrap_server, topic)
 
-    while True:
-        try:
+    try:
+        while True:
             message = input("Enter your message")
             p.send_message(message)
-        except KeyboardInterrupt:
+    except KeyboardInterrupt:
             pass
     p.commit()
