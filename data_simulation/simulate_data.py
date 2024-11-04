@@ -5,10 +5,10 @@ import json
 import random
 import time
 import kafka
-from kafka import KafkaProducer
+from confluent_kafka import Producer
 
 """Configure kafka producer"""
-producer = KafkaProducer(bootstrap_servers='localhost:9092')
+p = Producer(bootstrap_servers='localhost:9092')
 
 """function to generate random energy consumption data"""
 def generate_data(sensor_id):
@@ -22,7 +22,7 @@ def main():
     sensor_id = 1
     while True:
         energy_data = generate_data(sensor_id)
-        producer.send('energy_consumption_topic', json.dumps(energy_data).encode('utf-8'))
+        p.send('energy_consumption_topic', json.dumps(energy_data).encode('utf-8'))
         print(f"sent data: {energy_data}")
         time.sleep(10)
 

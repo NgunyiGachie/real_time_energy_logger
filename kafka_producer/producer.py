@@ -1,28 +1,32 @@
-"""
-Kafka producer for sending messages to kafka topic
-"""
+from confluent_kafka import Producer
+from .admin import Admin
 
-from kafka import KafkaProducer
-from kafka.errors import KafkaError
-import logging as log
+class ProducerClass:
+    #initialization
+    def __init__(self, bootstrap_server):
+        self.bootstrap_server = bootstrap_server
+        self.producer = Producer({'bootstrap.servers': self.bootstrap_server})
 
-log.basicConfig(level=log.INFO)
+    def send_message(self, message):
+        try:
+            self.producer.produce(self.topic, message)
+        except Exception as e:
+            print(e)
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
-future = producer.send('energy-data', b'raw_bytes')
+    def commit(self):
+        self.producer.flush()
 
-"""
-Block for synchronous sends
-"""
-try:
-    record_metadata = future.get(timeout=10)
-except KafkaError as e:
-    """Handle producer request failure"""
-    log.error("Failed to send message to Kafka: %s", e)
-else:
-    """Successful result returns assigned partition and offset"""
-    log.info(f"Message sent to topic: {record_metadata.topic}")
-    log.info(f"Message partition: {record_metadata.partition}")
-    log.info(f"Message offset: {record_metadata.offset}")
+if __name__ == '__main__':
+    bootstrap_server = 'localhost:9092'
+    topic = 'test-topic'
+    a = Admin(bootstrap_server)
+    a.create_topic(topic)
+    p = ProducerClass(bootstrap_server, topic)
 
-producer.close()
+    try:
+        while True:
+            message = input("Enter your message")
+            p.send_message(message)
+    except KeyboardInterrupt:
+            pass
+    p.commit()
