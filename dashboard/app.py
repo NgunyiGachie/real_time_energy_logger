@@ -14,18 +14,17 @@ configure_routes(app)
 
 redis_host = os.getenv('REDIS_HOST', 'localhost')
 redis_port = os.getenv('REDIS_PORT', 6379)
-app.redis_cache = RedisCache(host=redis_host, port=redis_port)
+redis_cache = RedisCache(host=redis_host, port=redis_port)
 
-kafka_servers = "localhost:9092"
-kafka_topic = "energy_data"
-
-kafka_topic = os.getenv('KAFKA_TOPIC', kafka_topic)
-kafka_servers = os.getenv('KAFKA_SERVERS', kafka_servers)
+bootstrap_server = os.getenv('KAFKA_SERVERS', 'localhost:9092')
+group_id = os.getenv('KAFKA_GROUP_ID', 'my-group-id')
+topic = os.getenv('KAFKA_TOPIC', 'energy_data')
 
 consume_thread = ConsumerClass(
-    topic=kafka_topic,
-    servers=kafka_servers,
-    redis_client=app.redis_cache.get_client()
+    bootstrap_server=bootstrap_server,
+    group_id=group_id,
+    topic=topic,
+    redis_cache=redis_cache
 )
 consume_thread.start()
 
