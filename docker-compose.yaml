@@ -1,4 +1,5 @@
 version: '3.7'
+
 services:
   redpanda-0:
     image: docker.redpanda.com/redpandadata/redpanda:v23.2.21
@@ -13,11 +14,9 @@ services:
       - --advertise-pandaproxy-addr internal://redpanda-0:8082,external://localhost:18082
       - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
     ports:
-      - 19092:19092
-      - 18082:18082
-      - 18081:18081
-    networks:
-      - redpanda-network
+      - 18081:8081
+      - 18082:8082
+      - 19092:9092
 
   redpanda-1:
     image: docker.redpanda.com/redpandadata/redpanda:v23.2.21
@@ -32,13 +31,11 @@ services:
       - --advertise-pandaproxy-addr internal://redpanda-1:8082,external://localhost:28082
       - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:28081
     ports:
-      - 29092:29092
-      - 28082:28082
-      - 28081:28081
+      - 28081:8081
+      - 28082:8082
+      - 29092:9092
     depends_on:
       - redpanda-0
-    networks:
-      - redpanda-network
 
   redpanda-2:
     image: docker.redpanda.com/redpandadata/redpanda:v23.2.21
@@ -53,13 +50,11 @@ services:
       - --advertise-pandaproxy-addr internal://redpanda-2:8082,external://localhost:38082
       - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:38081
     ports:
-      - 39092:39092
-      - 38082:38082
-      - 38081:38081
+      - 38081:8081
+      - 38082:8082
+      - 39092:9092
     depends_on:
       - redpanda-0
-    networks:
-      - redpanda-network
 
   redpanda-console:
     image: docker.redpanda.com/redpandadata/console:v2.7.2
@@ -82,9 +77,3 @@ services:
       - 8080:8080
     depends_on:
       - redpanda-0
-    networks:
-      - redpanda-network
-
-networks:
-  redpanda-network:
-    driver: bridge
