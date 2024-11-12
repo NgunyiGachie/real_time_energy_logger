@@ -19,7 +19,7 @@ class ProducerClass:
 
 if __name__ == '__main__':
     bootstrap_server = 'localhost:19092'
-    topic = 'test-topic'
+    topic = 'energy-topic'
     a = Admin(bootstrap_server)
     a.create_topic(topic)
     p = ProducerClass(bootstrap_server, topic)
