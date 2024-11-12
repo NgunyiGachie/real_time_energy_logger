@@ -26,8 +26,11 @@ if __name__ == '__main__':
 
     try:
         while True:
-            message = input("Enter your message")
+            message = input("Enter your message: ")
+            if message.lower() == 'exit':
+                print("Exiting producer...")
+                break
             p.send_message(message)
     except KeyboardInterrupt:
-            pass
+            print("\nProducer interrupted")
     p.commit()

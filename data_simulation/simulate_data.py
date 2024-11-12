@@ -4,11 +4,10 @@ Simulate data
 import json
 import random
 import time
-import kafka
 from confluent_kafka import Producer
 
 """Configure kafka producer"""
-p = Producer(bootstrap_servers='localhost:9092')
+p = Producer({'bootstrap.servers': 'localhost:19092'})
 
 """function to generate random energy consumption data"""
 def generate_data(sensor_id):
@@ -22,7 +21,8 @@ def main():
     sensor_id = 1
     while True:
         energy_data = generate_data(sensor_id)
-        p.send('energy_consumption_topic', json.dumps(energy_data).encode('utf-8'))
+        p.produce('energy_consumption_topic', json.dumps(energy_data).encode('utf-8'))
+        p.flush()
         print(f"sent data: {energy_data}")
         time.sleep(10)
 

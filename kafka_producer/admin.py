@@ -14,4 +14,3 @@ class Admin:
             new_topic = NewTopic(topic, num_partitions=1, replication_factor=1)
             self.admin.create_topics([new_topic])
             print(f"Topic: {topic} has been created")
-        print(f"Topic: {topic} already exists")
