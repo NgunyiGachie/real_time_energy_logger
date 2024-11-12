@@ -1,3 +1,17 @@
+"""
+consumer.py
+-------------
+ A threaded Kafka consumer class that consumes messages from a specified Kafka topic
+and optionally stores the latest message in a Redis cache.
+
+Attributes:
+    bootstrap_server (str): The Kafka bootstrap server address.
+    group_id (str): The consumer group ID for Kafka.
+    topic (str): The Kafka topic to subscribe to for consuming messages.
+    redis_cache (Optional[RedisCache]): An optional RedisCache instance for caching messages.
+    consumer (Consumer): The Kafka consumer instance for polling messages.
+"""
+
 import threading
 from confluent_kafka import Consumer
 
@@ -5,6 +19,12 @@ class ConsumerClass(threading.Thread):
     def __init__(self, bootstrap_server, group_id, topic, redis_cache=None):
         """
         Initialize Kafka consumer class and thread.
+        ---------------
+        Args:
+            bootstrap_server (str): Kafka server address (e.g., 'localhost:9092').
+            group_id (str): Kafka consumer group ID.
+            topic (str): Kafka topic to consume messages from.
+            redis_cache (Optional[RedisCache]): RedisCache instance for caching messages (optional).
         """
         threading.Thread.__init__(self)
         self.bootstrap_server = bootstrap_server
@@ -15,7 +35,13 @@ class ConsumerClass(threading.Thread):
 
     def consume_messages(self):
         """
-        Start consuming messages from the Kafka topic.
+        Start consuming messages from the Kafka topic and process each message.
+
+        If a Redis cache is provided, stores the latest consumed message in Redis.
+        Prints each consumed message to the console.
+
+        Raises:
+            KeyboardInterrupt: Allows graceful shutdown if interrupted manually.
         """
         self.consumer.subscribe([self.topic])
         try:
@@ -35,6 +61,8 @@ class ConsumerClass(threading.Thread):
 
     def run(self):
         """
-        Override the run method to start consuming messages in the thread.
+        Override the `run` method of the threading.Thread class.
+
+        Starts the message consumption process in a separate thread, calling `consume_messages`.
         """
         self.consume_messages()
