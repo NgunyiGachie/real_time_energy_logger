@@ -49,6 +49,7 @@ configure_routes(app)
 redis_host = os.getenv('REDIS_HOST', 'localhost')
 redis_port = os.getenv('REDIS_PORT', 6379)
 redis_cache = RedisCache(host=redis_host, port=redis_port)
+app.redis_cache = redis_cache
 
 # Configure Kafka consumer settings from environment variables, with defaults
 bootstrap_server = os.getenv('KAFKA_SERVERS', 'localhost:9092')

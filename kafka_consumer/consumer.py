@@ -13,6 +13,7 @@ Attributes:
 """
 
 import threading
+import json
 from confluent_kafka import Consumer
 
 class ConsumerClass(threading.Thread):
@@ -51,9 +52,15 @@ class ConsumerClass(threading.Thread):
                     continue
                 if msg.error():
                     print(f"Error while consuming message: {msg.error()}")
-                print(f"Message consumed: {msg.value()}")
-                if self.redis_cache:
-                    self.redis_cache.set_latest_energy_data(msg.value())
+                else:
+                    message_value = msg.value().decode('utf-8')
+                    try:
+                        message_data = json.loads(message_value)
+                        print(f"Message consumed: {message_data}")
+                        if self.redis_cache:
+                            self.redis_cache.set_latest_energy_data(msg.value())
+                    except json.JSONDecodeError:
+                        print(f"Error decoding JSON: {message_value}")
         except KeyboardInterrupt:
             pass
         finally:

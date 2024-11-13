@@ -68,20 +68,6 @@ class RedisCache:
         except redis.ConnectionError as e:
             print(f"Redis connection error: {e}")
 
-    def get_all_energy_data(self) -> List[dict]:
-        """
-        Retrieve all energy data entries stored in the Redis list.
-
-        Returns:
-            List[dict]: A list of dictionaries containing all stored energy data.
-        """
-        try:
-            energy_data_list = self.get_client().lrange('energy_data_list', 0, -1)
-            return [json.loads(data) for data in energy_data_list]
-        except redis.ConnectionError as e:
-            print(f"Redis connection error: {e}")
-            return []
-
     def push_energy_data(self, energy_data: Union[str, dict], max_length: int = 100) -> None:
         """
         Add a new entry to the energy data list in Redis and limit the list length.
@@ -94,8 +80,24 @@ class RedisCache:
         try:
             if isinstance(energy_data, dict):
                 energy_data = json.dumps(energy_data)
+            print(f"Pushing energy data: {energy_data}")
             client = self.get_client()
             client.lpush('energy_data_list', energy_data)
             client.ltrim('energy_data_list', 0, max_length - 1)
         except redis.ConnectionError as e:
             print(f"Redis connection error: {e}")
+
+    def get_all_energy_data(self) -> List[dict]:
+        """
+        Retrieve all energy data entries stored in the Redis list.
+
+        Returns:
+            List[dict]: A list of dictionaries containing all stored energy data.
+        """
+        try:
+            energy_data_list = self.get_client().lrange('energy_data_list', 0, -1)
+            print(f"Retrieved energy data: {energy_data_list}")
+            return [json.loads(data) for data in energy_data_list]
+        except redis.ConnectionError as e:
+            print(f"Redis connection error: {e}")
+            return []

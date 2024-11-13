@@ -40,7 +40,7 @@ class EnergyDataResource(Resource):
               or an error message if no data is available for calculation.
             - HTTP status 200 if data is available, or 404 if no data is available.
         """
-        energy_values = current_app.redis_cache.get_all_energy()
+        energy_values = current_app.redis_cache.get_all_energy_data()
         if energy_values:
             average = sum(float(data['value']) for data in energy_values) / len(energy_values)
             return jsonify({'status': 'success', 'average_energy': average}), 200
