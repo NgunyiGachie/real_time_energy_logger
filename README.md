@@ -49,22 +49,25 @@ Configure the producer and consumer settings in kafka_config.py:
     - group.id: Consumer group ID.
     - auto.offset.reset: Determines the starting offset for consumers.
 # Usage
-## Running the API
+# Running the API
 Start the Flask app with:
     `python app.py`
-Example Data Structure in Redis
-   ```
-    {
-        "sensor_id": 1,
-        "timestamp": 1636447621,
-        "energy_consumption": 250.5
-    }
-    ```
+
+Example Data Structure in Redis:
+
+   json
+   {
+       "sensor_id": 1,
+       "timestamp": 1636447621,
+       "energy_consumption": 250.5
+   }
+
 # Kafka Producer and Consumer
 This project uses Confluent Kafka with Redpanda as follows:
-- Kafka Producer: Publishes energy data messages to a specified Kafka topic whenever new data is ingested. The producer is set up to serialize data as JSON.
-- Kafka Consumer: Subscribes to the Kafka topic to consume energy data messages, which are then cached in Redis. The consumer runs continuously to capture real-time data.
+- **Kafka Producer**: Publishes energy data messages to a specified Kafka topic whenever new data is ingested. The producer is set up to serialize data as JSON.
+- **Kafka Consumer**: Subscribes to the Kafka topic to consume energy data messages, which are then cached in Redis. The consumer runs continuously to capture real-time data.
+
 # Future Improvements
-- Persistent Data Storage: Add PostgreSQL support for long-term data retention.
-- Data Aggregation: Implement daily, weekly, and monthly statistics aggregation.
-- API Security: Introduce token-based authentication to secure endpoints.
+- **Persistent Data Storage**: Add PostgreSQL support for long-term data retention.
+- **Data Aggregation**: Implement daily, weekly, and monthly statistics aggregation.
+- **API Security**: Introduce token-based authentication to secure endpoints.
