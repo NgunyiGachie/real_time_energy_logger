@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Energy Consumption</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Optional for charts -->
+</head>
+<body>
+    <header>
+        <h1>Energy Consumption Dashboard</h1>
+    </header>
+
+    <section>
+        <h2>Recent Data</h2>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Sensor ID</th>
+                    <th>Energy Consumption</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Real-Time Graph (Optional)</h2>
+        <canvas id="consumption-chart" width="400" height="200"></canvas> <!-- For displaying data as a chart -->
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
