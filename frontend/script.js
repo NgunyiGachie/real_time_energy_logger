@@ -1,16 +1,13 @@
 // Fetch data from the backend (API endpoint)
 const fetchData = async () => {
     try {
-        const response = await fetch('http://localhost:5555/energy-data'); // Replace with your actual endpoint
+        const response = await fetch('http://localhost:5555/energy-data');
         const data = await response.json();
 
-        // Get the table body element
         const tableBody = document.querySelector("#data-table tbody");
 
-        // Clear previous data
         tableBody.innerHTML = '';
 
-        // Insert the fetched data into the table
         data.forEach(entry => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -21,7 +18,6 @@ const fetchData = async () => {
             tableBody.appendChild(row);
         });
 
-        // Optionally: Update the chart as well if using Chart.js
         updateChart(data);
 
     } catch (error) {
@@ -29,13 +25,12 @@ const fetchData = async () => {
     }
 };
 
-// Update chart with energy data
 const updateChart = (data) => {
     const labels = data.map(entry => new Date(entry.timestamp));
     const consumptionData = data.map(entry => entry.energy_consumption);
 
     const ctx = document.getElementById('consumption-chart').getContext('2d');
-    const chart = new Chart(ctx, {
+    const chart = new chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
@@ -60,11 +55,9 @@ const updateChart = (data) => {
                     beginAtZero: true
                 }
             }
-        });
+        }
+    });
 };
-
-// Call fetchData when the page loads
 window.onload = fetchData;
 
-// Optionally: Set an interval to fetch data every 10 seconds (real-time)
 setInterval(fetchData, 10000);
